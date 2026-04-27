@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netra — Settings</title>
+  <link rel="stylesheet" href="settings.css" />
+</head>
+<body class="settings-page">
+  <div class="settings-shell">
+    <header class="settings-header">
+      <h1 class="settings-title">Netra — Settings</h1>
+      <p class="settings-lede">API keys are stored locally in your browser. Close this tab when you are done.</p>
+    </header>
+
+    <form id="settingsForm" class="settings-form" autocomplete="off">
+      <label class="field-label" for="anthropicKey">Anthropic API key</label>
+      <input
+        id="anthropicKey"
+        class="field-input"
+        type="password"
+        spellcheck="false"
+        placeholder="sk-ant-…"
+      />
+
+      <label class="field-label" for="elevenKey">ElevenLabs API key</label>
+      <input
+        id="elevenKey"
+        class="field-input"
+        type="password"
+        spellcheck="false"
+        placeholder="xi_…"
+      />
+
+      <label class="field-label" for="workerUrl">Cloudflare Worker URL <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional — keeps API keys off your device)</span></label>
+      <input
+        id="workerUrl"
+        class="field-input"
+        type="url"
+        spellcheck="false"
+        placeholder="https://beacon-proxy.xyz.workers.dev"
+      />
+
+      <button type="submit" class="btn btn-primary" id="saveBtn">Save settings</button>
+    </form>
+
+    <p id="formFeedback" class="form-feedback" role="status" aria-live="polite"></p>
+  </div>
+
+  <script>
+    const STORAGE = {
+      anthropic:    "anthropicKey",
+      eleven:       "elevenLabsApiKey",
+      elevenLegacy: "elevenLabsKey",
+      workerUrl:    "workerUrl",
+    };
+
+    const form          = document.getElementById("settingsForm");
+    const anthropicInput = document.getElementById("anthropicKey");
+    const elevenInput   = document.getElementById("elevenKey");
+    const workerInput   = document.getElementById("workerUrl");
+    const feedback      = document.getElementById("formFeedback");
+    const saveBtn       = document.getElementById("saveBtn");
+
+    function setFeedback(message, kind) {
+      feedback.textContent = message;
+      feedback.className = "form-feedback" + (kind ? " is-" + kind : "");
+    }
+
+    async function load() {
+      try {
+        const data = await chrome.storage.local.get([
+          STORAGE.anthropic,
+          STORAGE.eleven,
+          STORAGE.elevenLegacy,
+          STORAGE.workerUrl,
+        ]);
+        anthropicInput.value = data[STORAGE.anthropic] || "";
+        elevenInput.value    = data[STORAGE.eleven] || data[STORAGE.elevenLegacy] || "";
+        workerInput.value    = data[STORAGE.workerUrl] || "";
+      } catch (e) {
+        console.error("[Beacon Settings] load failed:", e);
+        setFeedback("Could not load saved settings.", "error");
+      }
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      saveBtn.disabled = true;
+      setFeedback("Saving…", "");
+
+      const anthropic = anthropicInput.value.trim();
+      const eleven    = elevenInput.value.trim();
+      const worker    = workerInput.value.trim();
+
+      try {
+        const payload = {};
+        payload[STORAGE.anthropic] = anthropic;
+
+        payload[STORAGE.eleven]       = eleven;
+        payload[STORAGE.elevenLegacy] = eleven;
+
+        // workerUrl: store empty string to clear (claude.js treats "" as absent)
+        payload[STORAGE.workerUrl] = worker;
+
+        await chrome.storage.local.set(payload);
+        setFeedback("Saved. You can close this tab.", "success");
+      } catch (err) {
+        console.error("[Beacon Settings] save failed:", err);
+        setFeedback(err.message || "Save failed. Try again.", "error");
+      } finally {
+        saveBtn.disabled = false;
+      }
+    });
+
+    load();
+  </script>
+</body>
+</html>

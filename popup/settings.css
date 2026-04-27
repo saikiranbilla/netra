@@ -1,0 +1,168 @@
+/* Beacon — Settings (matches popup theme) */
+
+:root {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --border: rgba(255, 255, 255, 0.06);
+  --text: #fafafa;
+  --text-muted: #a1a1aa;
+  --accent: #4f46e5;
+  --accent-glow: 0 0 24px rgba(79, 70, 229, 0.35);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body.settings-page {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  animation: page-in 180ms ease-out both;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.settings-shell {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 40px 24px 48px;
+}
+
+.settings-header {
+  margin-bottom: 28px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-bottom: 16px;
+  transition: color 150ms ease;
+}
+
+.back-link:hover {
+  color: #c4b5fd;
+}
+
+.settings-title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.settings-lede {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.field-label {
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.field-label:first-of-type {
+  margin-top: 0;
+}
+
+.field-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.field-input:focus {
+  border-color: rgba(79, 70, 229, 0.55);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.18);
+}
+
+.field-input::placeholder {
+  color: #52525b;
+}
+
+.btn {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 24px;
+  padding: 12px 20px;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  align-self: flex-start;
+  background: linear-gradient(180deg, #5b52f0 0%, var(--accent) 100%);
+  color: #fff;
+  box-shadow: var(--accent-glow);
+}
+
+.btn-primary:hover:not(:disabled) {
+  box-shadow: 0 0 28px rgba(79, 70, 229, 0.5);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-feedback {
+  margin-top: 16px;
+  min-height: 22px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.form-feedback.is-success {
+  color: #4ade80;
+}
+
+.form-feedback.is-error {
+  color: #f87171;
+}
