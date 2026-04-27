@@ -2,6 +2,8 @@
 
 A Chrome extension that puts an AI companion on every webpage. Hold Space, ask a question in natural language, and Netra responds with voice and visual guidance — flying a cursor to the exact element you need, drawing spatial highlights, and dimming the rest of the page with a cinematic spotlight.
 
+![Netra demo — asking how to copy a repo](icons/demo.gif)
+
 ---
 
 ## Features
